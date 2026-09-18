@@ -50,7 +50,7 @@
     <div id="Portada">
 	<h1>NEURAL NEXUS</h1>
         <p>OFFLINE MULTI-AGENT SIMULATION PORTAL</p>
-        <button class="btnenter" onclick="iniciarSistema()">></button>
+        <button class="btnenter" onclick="inicio()">></button>
     </div>
 
     <div id="panel-lateral">
@@ -62,6 +62,11 @@
     <div id="espacio-3d"></div>
 
     <script>
+		function inicio() {
+            const portada = document.getElementById('Portada');
+            portada.style.transition = "opacity 0.5s ease";
+            portada.style.opacity = "0";
+		}
         const logMensajes = document.getElementById("log-mensajes");
         
         // Función para escribir en la terminal lateral
