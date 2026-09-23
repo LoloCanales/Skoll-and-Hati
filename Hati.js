@@ -21,7 +21,7 @@ function txtPU(texto) {
 // Nodos 3D
 function crearEsfera() {
 	contadorNodos++;
-    	const idNodo = `nodo_${contadorNodos}`;
+	const idNodo = `nodo_${contadorNodos}`;
 	const nombreNodo = `Agente ${contadorNodos}`;
 	const grupoNodo = (contadorNodos % 3) + 1; // Alterna grupos (1, 2, 3)
 
@@ -39,8 +39,6 @@ function crearEsfera() {
 	if (Grafo) {
 		Grafo.graphData({nodes: [...datosGrafo.nodes], links: [...datosGrafo.links]});
 	}
-	
-	txtPU(`<span class="sistema">tr fin</span>`);
 	txtPU(`<span class="sistema">[+] <b>Nueva esfera creada:</b> ${nombreNodo}</span>`);
 }
 
