@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<!-- saved from url=(0065)file:///C:/Users/manuc/Documents/Sk%C3%B6ll%20y%20Hati/visor.html -->
+<html lang="es"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+	
+
+    <title>Grafo 3D Multi-Agente - Modo Local</title>
+    <style>
+        body { margin: 0;
+			  background-color: #050505;
+			  overflow: hidden;
+			  font-family: monospace;
+	}
+        
+        #Portada {
+			position: absolute;
+			z-index: 100;
+			top: 0; left: 0;
+			width: 100vw; height: 100vh;
+			color: #00ff00;
+			background-color: #000000;
+			background-image: url('Portada.jpg');
+    	    background-position: center;
+    	    background-repeat: no-repeat;
+			transition: transform 1.5s cubic-bezier(0.77, 0, 0.175, 1), opacity 1.5s ease;
+            
+	}.btnenter {
+    	    position: absolute;
+    	    bottom: 40px;
+    	    right: 40px;
+
+	#panel-lateral {
+	    position: absolute;
+	    top: 15px; left: 15px; width: 350px; height: 90vh;
+            color: #00ff00; z-index: 10; background: rgba(0, 20, 0, 0.85); 
+            padding: 15px; border: 1px solid #00ff00; overflow-y: auto;
+            box-shadow: 0 0 15px rgba(0, 255, 0, 0.3); border-radius: 5px;
+        }
+        
+        .log-entrada { margin-bottom: 12px; border-bottom: 1px dotted #004400; padding-bottom: 8px; line-height: 1.4;}
+        .agente-nombre { color: #00ffff; font-weight: bold; }
+        .sistema { color: #ffaa00; font-style: italic; }
+    </style>
+    
+    <!-- El motor gráfico local -->
+    <script src="./Grafo 3D Multi-Agente - Modo Local_files/3d-force-graph.min.js"></script><style type="text/css">.graph-info-msg {
+  top: 50%;
+  width: 100%;
+  text-align: center;
+  color: lavender;
+  opacity: 0.7;
+  font-size: 22px;
+  position: absolute;
+  font-family: Sans-serif;
+}
+
+.scene-container .clickable {
+  cursor: pointer;
+}
+
+.scene-container .grabbable {
+  cursor: move;
+  cursor: grab;
+  cursor: -moz-grab;
+  cursor: -webkit-grab;
+}
+
+.scene-container .grabbable:active {
+  cursor: grabbing;
+  cursor: -moz-grabbing;
+  cursor: -webkit-grabbing;
+}</style><style type="text/css">.scene-nav-info {
+  bottom: 5px;
+  width: 100%;
+  text-align: center;
+  color: slategrey;
+  opacity: 0.7;
+  font-size: 10px;
+}
+
+.scene-tooltip {
+  top: 0;
+  color: lavender;
+  font-size: 15px;
+}
+
+.scene-nav-info, .scene-tooltip {
+  position: absolute;
+  font-family: sans-serif;
+  pointer-events: none;
+  user-select: none;
+}
+
+.scene-container canvas:focus {
+  outline: none;
+}</style>
+</head>
+<body>
+    
+    <!-- Interfaz 2D superpuesta -->
+    <div id="Portada">
+	<h1>NEURAL NEXUS</h1>
+        <p>OFFLINE MULTI-AGENT SIMULATION PORTAL</p>
+        <button class="btnenter" onclick="inicio()">&gt;</button>
+    </div>
+
+    <div id="panel-lateral">
+        <h2 style="margin-top:0; border-bottom: 2px solid #00ff00;">Terminal Central</h2>
+        <div id="log-mensajes"><span class="sistema">Iniciando sistema offline... Esperando conexión de Python.</span></div>
+    </div>
+    
+    <!-- Contenedor del mundo 3D -->
+    <div id="espacio-3d"><div style="position: relative;"><div><div class="scene-container" style="position: relative; width: 1536px; height: 695px;"><div class="scene-nav-info">Left-click: rotate, Mouse-wheel/middle-click: zoom, Right-click: pan</div><div class="scene-tooltip"></div><canvas data-engine="three.js r162" width="1920" height="868" style="display: block; touch-action: none; width: 1536px; height: 695px;"></canvas></div></div><div class="graph-info-msg"></div></div></div>
+
+    <script>
+		function inicio() {
+            const portada = document.getElementById('Portada');
+			portada.style.transform = "translateX(-100vw)"
+		}
+        const logMensajes = document.getElementById("log-mensajes");
+        
+        // Función para escribir en la terminal lateral
+        function imprimirConsola(texto) {
+            logMensajes.innerHTML += `<div class="log-entrada">${texto}</div>`;
+            logMensajes.scrollTop = logMensajes.scrollHeight; // Hace scroll automático hacia abajo
+        }
+
+
+
+
+// 1. Preparamos el entorno 3D con físicas mejoradas
+        const datosGrafo = { nodes: [], links: [] };
+        const Grafo = ForceGraph3D()
+        (document.getElementById('espacio-3d'))
+        .graphData(datosGrafo)
+        .nodeLabel('nombre')
+	.nodeOpacity(0.9)
+        .nodeAutoColorBy('grupo')
+        .linkDirectionalParticles(1)        // Más partículas de luz simultáneas
+        .linkDirectionalParticleSpeed(0.005) // Velocidad del rayo
+        .linkDirectionalParticleWidth(2);   // Rayo más grueso y visible
+
+
+// 2. Nos conectamos al cerebro en Python
+        const conexionLocal = new WebSocket("ws://localhost:8765");
+
+        conexionLocal.onopen = () => {
+            logMensajes.innerHTML = ""; // Limpiamos el mensaje de "esperando"
+            imprimirConsola(`<span class="sistema">✅ Conexión segura establecida (127.0.0.1)</span>`);
+        };
+
+
+// 3. El cerebro del sistema visual: ¿Qué hacer al recibir un evento?
+        conexionLocal.onmessage = function(evento) {
+            const datos = JSON.parse(evento.data);
+
+            if (datos.accion === "nuevo_nodo") {
+                imprimirConsola(`[+] <b>Nuevo Agente en red:</b> ${datos.nombre}`);
+                datosGrafo.nodes.push({ id: datos.id, nombre: datos.nombre, grupo: datos.grupo });
+                Grafo.graphData(datosGrafo);
+            } 
+            else if (datos.accion === "nueva_conexion") {
+                imprimirConsola(`[⚡] <b>Enlace establecido:</b> ${datos.origen} ➔ ${datos.destino}`);
+                datosGrafo.links.push({ source: datos.origen, target: datos.destino });
+                Grafo.graphData(datosGrafo);
+            }
+            // ¡NUEVO EVENTO! Para cuando integres IA real y los agentes hablen
+            else if (datos.accion === "mensaje") {
+                imprimirConsola(`🗣️ <span class="agente-nombre">${datos.emisor}:</span> ${datos.texto}`);
+            }
+        };
+    </script>
+
+
+</body></html>
