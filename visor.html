@@ -5,53 +5,16 @@
 	<meta charset="UTF-8">
 
     <title>Grafo 3D Multi-Agente - Modo Local</title>
-    <style>
-        body { margin: 0;
-			  background-color: #050505;
-			  overflow: hidden;
-			  font-family: monospace;
-	}
-        
-        #Portada {
-			position: absolute;
-			z-index: 100;
-			top: 0; left: 0;
-			width: 100vw; height: 100vh;
-			color: #00ff00;
-			background-color: #000000;
-			background-image: url('Portada.jpg');
-    	    background-position: center;
-    	    background-repeat: no-repeat;
-			transition: transform 1.5s cubic-bezier(0.77, 0, 0.175, 1), opacity 1.5s ease;
-            
-	}.btnenter {
-    	    position: absolute;
-    	    bottom: 40px;
-    	    right: 40px;
-
-	#panel-lateral {
-	    position: absolute;
-	    top: 15px; left: 15px; width: 350px; height: 90vh;
-            color: #00ff00; z-index: 10; background: rgba(0, 20, 0, 0.85); 
-            padding: 15px; border: 1px solid #00ff00; overflow-y: auto;
-            box-shadow: 0 0 15px rgba(0, 255, 0, 0.3); border-radius: 5px;
-        }
-        
-        .log-entrada { margin-bottom: 12px; border-bottom: 1px dotted #004400; padding-bottom: 8px; line-height: 1.4;}
-        .agente-nombre { color: #00ffff; font-weight: bold; }
-        .sistema { color: #ffaa00; font-style: italic; }
-    </style>
-    
-    <!-- El motor gráfico local -->
+    <link rel="stylesheet" href="ESTILOS.css">
     <script src="3d-force-graph.min.js"></script>
 </head>
 <body>
     
     <!-- Interfaz 2D superpuesta -->
     <div id="Portada">
-	<h1>NEURAL NEXUS</h1>
-        <p>OFFLINE MULTI-AGENT SIMULATION PORTAL</p>
-        <button class="btnenter" onclick="inicio()">></button>
+	<h1></h1>
+        <p></p>
+        <button id="btnenter" onclick="inicio()">></button>
     </div>
 
     <div id="panel-lateral">
