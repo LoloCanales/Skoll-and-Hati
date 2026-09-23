@@ -1,60 +1,63 @@
-function inicio(){
+// Datos globales
+const datosGrafo = { nodes: [], links: [] };
+let contadorNodos = 0;
+let Grafo = null;
+
+// Funciones de la interfaz
+function inicio() {
 	const portada = document.getElementById('Portada');
 	portada.style.transform = "translateX(-100vw)";
-	imprimirConsola(`<span class="sistema"> Entorno 3D activo (Modo Nativo JS)</span>`)
-	}
-
-const logMensajes = document.getElementById("log-mensajes");
-
-function txtPU(texto){
+	txtPU(`<span class="sistema">Entorno 3D activo</span>`);
 }
 
-function imprimirConsola(texto) {
-	logMensajes.innerHTML += `<div class="log-entrada">${texto}</div>`;
-	logMensajes.scrollTop = logMensajes.scrollHeight; // Hace scroll hacia abajo
+function txtPU(texto) {
+	const logMensajes = document.getElementById('DisplayPanel');
+	if (logMensajes) {
+		logMensajes.innerHTML += `<div class="log-entrada">${texto}</div>`;
+		logMensajes.scrollTop = logMensajes.scrollHeight;
+	}
+}
+
+// Nodos 3D
+function crearEsfera() {
+	contadorNodos++;
+    	const idNodo = `nodo_${contadorNodos}`;
+	const nombreNodo = `Agente ${contadorNodos}`;
+	const grupoNodo = (contadorNodos % 3) + 1; // Alterna grupos (1, 2, 3)
+
+	// Insertar la nueva esfera al arreglo de datos
+	datosGrafo.nodes.push({id: idNodo, nombre: nombreNodo, grupo: grupoNodo});
+
+	// Si ya existe otra esfera, crea un enlace con la anterior
+	if (datosGrafo.nodes.length > 1) {
+		const idNodoAnterior = datosGrafo.nodes[datosGrafo.nodes.length - 2].id;
+		datosGrafo.links.push({ source: idNodoAnterior, target: idNodo});
+		txtPU(`<span class="sistema">[⚡] <b>Enlace establecido:</b> ${idNodoAnterior} ➔ ${idNodo}</span>`);
 	}
 
-
-
-
-// 1. Preparamos el entorno 3D con físicas mejoradas
-const datosGrafo = { nodes: [], links: [] };
-const Grafo = ForceGraph3D()
-(document.getElementById('espacio-3d'))
-.graphData(datosGrafo)
-.nodeLabel('nombre')
-.nodeOpacity(0.9)
-.nodeAutoColorBy('grupo')
-.linkDirectionalParticles(1)        // Más partículas de luz simultáneas
-.linkDirectionalParticleSpeed(0.005) // Velocidad del rayo
-.linkDirectionalParticleWidth(2);   // Rayo más grueso y visible
-
-
-// 2. Nos conectamos al cerebro en Python
-const conexionLocal = new WebSocket("ws://localhost:8765");
-
-conexionLocal.onopen = () => {
-logMensajes.innerHTML = ""; // Limpiamos el mensaje de "esperando"
-imprimirConsola(`<span class="sistema">✅ Conexión segura establecida (127.0.0.1)</span>`);
-};
-
-
-// 3. El cerebro del sistema visual: ¿Qué hacer al recibir un evento?
-conexionLocal.onmessage = function(evento) {
-	const datos = JSON.parse(evento.data);
-	if (datos.accion === "nuevo_nodo") {
-		imprimirConsola(`[+] <b>Nuevo Agente en red:</b> ${datos.nombre}`);
-		datosGrafo.nodes.push({ id: datos.id, nombre: datos.nombre, grupo: datos.grupo });
-		Grafo.graphData(datosGrafo);
-    } 
-	else if (datos.accion === "nueva_conexion") {
-		imprimirConsola(`[⚡] <b>Enlace establecido:</b> ${datos.origen} ➔ ${datos.destino}`);
-		datosGrafo.links.push({ source: datos.origen, target: datos.destino });
-		Grafo.graphData(datosGrafo);
+	// Forzar el redibujado de la escena pasando referencias renovadas
+	if (Grafo) {
+		Grafo.graphData({nodes: [...datosGrafo.nodes], links: [...datosGrafo.links]});
 	}
-// ¡NUEVO EVENTO! Para cuando integres IA real y los agentes hablen
-	else if (datos.accion === "mensaje") {
-		imprimirConsola(`🗣️ <span class="agente-nombre">${datos.emisor}:</span> ${datos.texto}`);
+	
+	txtPU(`<span class="sistema">tr fin</span>`);
+	txtPU(`<span class="sistema">[+] <b>Nueva esfera creada:</b> ${nombreNodo}</span>`);
+}
+
+// 4. Inicialización segura cuando el DOM está completamente cargado
+document.addEventListener('DOMContentLoaded', () => {
+    const contenedor = document.getElementById('espacio-3d');
+    
+    if (contenedor) {
+        Grafo = ForceGraph3D()(contenedor)
+            .graphData(datosGrafo)
+            .nodeLabel('nombre')
+            .nodeOpacity(0.9)
+            .nodeAutoColorBy('grupo')
+            .linkDirectionalParticles(1)
+            .linkDirectionalParticleSpeed(0.005)
+            .linkDirectionalParticleWidth(2);
+    } else {
+        console.error("No se encontró el contenedor #espacio-3d en el HTML");
     }
-};
-
+});
