@@ -22,6 +22,7 @@
 			background-image: url('Portada.jpg');
     	    background-position: center;
     	    background-repeat: no-repeat;
+			transition: transform 1.5s cubic-bezier(0.77, 0, 0.175, 1), opacity 1.5s ease;
             
 	}.btnenter {
     	    position: absolute;
@@ -64,8 +65,7 @@
     <script>
 		function inicio() {
             const portada = document.getElementById('Portada');
-            portada.style.transition = "opacity 0.5s ease";
-            portada.style.opacity = "0";
+			portada.style.transform = "translateX(-100vw)"
 		}
         const logMensajes = document.getElementById("log-mensajes");
         
