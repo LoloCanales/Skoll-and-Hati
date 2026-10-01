@@ -19,6 +19,12 @@ function txtPU(texto) {
 }
 
 // Nodos 3D
+function nodo() {
+	crearEsfera();
+	AddPEST();
+	
+}
+
 function crearEsfera() {
 	contadorNodos++;
 	const idNodo = `nodo_${contadorNodos}`;
@@ -41,6 +47,14 @@ function crearEsfera() {
 	}
 	txtPU(`<span class="sistema">[+] <b>Nueva esfera creada:</b> ${nombreNodo}</span>`);
 }
+
+function AddPEST() {
+	const PEST = document.getElementById('PanelUsuario');
+	if (PEST){
+		PEST.innerHTML += `<div class="PESTNodo"></div>`;
+	}
+}
+
 
 // 4. Inicialización segura cuando el DOM está completamente cargado
 document.addEventListener('DOMContentLoaded', () => {
