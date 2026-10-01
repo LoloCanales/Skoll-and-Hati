@@ -20,15 +20,15 @@ function txtPU(texto) {
 
 // Nodos 3D
 function nodo() {
-	crearEsfera();
-	AddPEST();
+	contadorNodos++;
+	crearEsfera(contadorNodos);
+	AddPEST(contadorNodos);
 }
 
-function crearEsfera() {
-	contadorNodos++;
-	const idNodo = `nodo_${contadorNodos}`;
-	const nombreNodo = `Agente ${contadorNodos}`;
-	const grupoNodo = (contadorNodos % 3) + 1; // Alterna grupos (1, 2, 3)
+function crearEsfera(id) {
+	const idNodo = `nodo_${id}`;
+	const nombreNodo = `Agente ${id}`;
+	const grupoNodo = (id % 3) + 1; // Alterna grupos (1, 2, 3)
 
 	// Insertar la nueva esfera al arreglo de datos
 	datosGrafo.nodes.push({id: idNodo, nombre: nombreNodo, grupo: grupoNodo});
@@ -47,18 +47,17 @@ function crearEsfera() {
 	txtPU(`<span class="sistema">[+] <b>Nueva esfera creada:</b> ${nombreNodo}</span>`);
 }
 
-function AddPEST() {
+function AddPEST(id) {
 	const PEST = document.getElementById('PanelUsuario');
 	if (PEST){
-		PEST.innerHTML += `<div class="PESTNodo"></div>`;
+		PEST.innerHTML += `<div id="PESTNodo${id}" class="PESTNodo"></div>`;
 	}
 }
 
-function AddPEST2() {
-	const nuevaPestana = document.createElement('div');
-	nuevaPestana.className = 'PESTNodo';
-	nuevaPestana.innerHTML = `<span></span>`;
-	document.body.appendChild(nuevaPestana);
+function SHOWNodo(nodo) {
+	const PEST = document.getElementById(`PESTNodo${nodo}`);
+	PEST.style.transform = "translateX(100vw)";
+	txtPU(`<span class="sistema">Entorno 3D activo</span>`);
 }
 
 
@@ -69,14 +68,24 @@ document.addEventListener('DOMContentLoaded', () => {
     
     if (contenedor) {
         Grafo = ForceGraph3D()(contenedor)
-            .graphData(datosGrafo)
-            .nodeLabel('nombre')
-            .nodeOpacity(0.9)
-            .nodeAutoColorBy('grupo')
-            .linkDirectionalParticles(1)
-            .linkDirectionalParticleSpeed(0.005)
-            .linkDirectionalParticleWidth(2);
-    } else {
+			.graphData(datosGrafo)
+			.nodeLabel('nombre')
+			.nodeOpacity(0.9)
+			.nodeAutoColorBy('grupo')
+			.linkDirectionalParticles(1)
+			.linkDirectionalParticleSpeed(0.005)
+			.linkDirectionalParticleWidth(2)
+			.onNodeClick((nodo, evento) => {
+				txtPU(`<span class="sistema">[🔍] <b>click:</b> ${nodo.nombre}</span>`);
+				// 1. Zoom
+				const distancia = 80;
+				const hipotenusa = Math.hypot(nodo.x || 0, nodo.y || 0, nodo.z || 0) || 1;
+				const distRatio = 1 + distancia / hipotenusa;
+				Grafo.cameraPosition({ x: (nodo.x || 0) * distRatio, y: (nodo.y || 0) * distRatio, z: (nodo.z || 0) * distRatio }, nodo, 2000);
+				// 2. Mover pestañas hacia la derecha
+				SHOWNodo(nodo);
+			})
+	} else {
         console.error("No se encontró el contenedor #espacio-3d en el HTML");
     }
 });
