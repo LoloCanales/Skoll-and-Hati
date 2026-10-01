@@ -55,8 +55,10 @@ function AddPEST(id) {
 }
 
 function SHOWNodo(nodo) {
-	const PEST = document.getElementById(`PESTNodo${nodo}`);
-	PEST.style.transform = "translateX(100vw)";
+	const idNumero = nodo.id ? nodo.id.replace('nodo_', '') : nodo;
+	
+	const PEST = document.getElementById(`PESTNodo${idNumero}`);
+	PEST.style.transform = "translateX(100%)";
 	txtPU(`<span class="sistema">Entorno 3D activo</span>`);
 }
 
