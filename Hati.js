@@ -22,7 +22,6 @@ function txtPU(texto) {
 function nodo() {
 	crearEsfera();
 	AddPEST();
-	
 }
 
 function crearEsfera() {
@@ -54,6 +53,14 @@ function AddPEST() {
 		PEST.innerHTML += `<div class="PESTNodo"></div>`;
 	}
 }
+
+function AddPEST2() {
+	const nuevaPestana = document.createElement('div');
+	nuevaPestana.className = 'PESTNodo';
+	nuevaPestana.innerHTML = `<span></span>`;
+	document.body.appendChild(nuevaPestana);
+}
+
 
 
 // 4. Inicialización segura cuando el DOM está completamente cargado
