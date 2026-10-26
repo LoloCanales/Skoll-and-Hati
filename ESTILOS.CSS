@@ -116,7 +116,7 @@ body {
 
 
 
-/* Nav*/
+/* Navegador ============================================================================*/
 nav {
 	background-color: #0A3C30;
 	border: 1px solid white;
@@ -158,6 +158,11 @@ nav > ul > li:hover > a > .caret {
 
 nav > ul > li > div {
 	visibility: hidden;
+	position: absolute;
+	width: 80px;
+	line-height: 40px;
+	padding: 0 24px;
+	background-color: #00523F;
 }
 
 nav > ul > li:hover > div {
@@ -165,6 +170,7 @@ nav > ul > li:hover > div {
 	opacity: 1;
 	visibility: visible;
 }
+
 
 
 
