@@ -112,3 +112,30 @@ body {
 	color: #00ffff; 
 	font-weight: bold; 
 }
+
+nav {
+	background-color: #0A3C30;
+	border: 1px solid white;
+	border-radius: 4px;
+	box-shadow: 0 2px 2px -1px rgba(0, 0, 0, 0.055);
+	color: white;
+	display: block;
+	margin: 8px 25px 5px 0px;
+	overflow: hidden;
+	width: 100%; 
+}
+
+nav ul {
+	margin: 0;
+	padding: 0;
+}
+
+nav ul li {
+	display: inline-block;
+	list-style-type: none;
+	text-decoration: none;
+}
+
+nav ul li a {
+	text-decoration: none;
+}
