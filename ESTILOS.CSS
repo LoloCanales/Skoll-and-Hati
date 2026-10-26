@@ -113,6 +113,10 @@ body {
 	font-weight: bold; 
 }
 
+
+
+
+/* Nav*/
 nav {
 	background-color: #0A3C30;
 	border: 1px solid white;
@@ -136,6 +140,31 @@ nav ul li {
 	text-decoration: none;
 }
 
-nav ul li a {
+nav > ul > li:hover {
+	background-color: #00523F;
+        }
+
+nav > ul > li > a {
+	color: white;
+	display: block;
+	padding: 0 24px;
+	line-height: 40px;
 	text-decoration: none;
 }
+
+nav > ul > li:hover > a > .caret {
+	border-top-color: rgb( 255, 255, 255 );
+}
+
+nav > ul > li > div {
+	visibility: hidden;
+}
+
+nav > ul > li:hover > div {
+	display: block;
+	opacity: 1;
+	visibility: visible;
+}
+
+
+
