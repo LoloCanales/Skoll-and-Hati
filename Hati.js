@@ -26,7 +26,7 @@ function nodo() {
 }
 
 function crearEsfera(id) {
-	const idNodo = `nodo_${id}`;
+	const idNodo = `Nodo_${id}`;
 	const nombreNodo = `Agente ${id}`;
 	const grupoNodo = (id % 3) + 1; // Alterna grupos (1, 2, 3)
 
@@ -49,9 +49,20 @@ function crearEsfera(id) {
 
 function AddPEST(id) {
 	const PEST = document.getElementById('PanelUsuario');
+	const SelLinkA = document.getElementById('NodA');
+	const SelLinkB = document.getElementById('NodB');
 	if (PEST){
 		PEST.innerHTML += `<div id="PESTNodo${id}" class="PESTNodo"></div>`;
+		SelLinkA.innerHTML += `<option value="Nodo_${id}">Nodo_${id}</option>`;
+		SelLinkB.innerHTML += `<option value="Nodo_${id}">Nodo_${id}</option>`;
 	}
+}
+
+function AddLink() {
+	const NodoJA = document.getElementById("NodHA").value;
+	const NodoJB = document.getElementById("NodHB").value;
+	datosGrafo.links.push({ source: NodoJA, target: NodoJB});
+
 }
 
 function SHOWNodo(nodo) {
