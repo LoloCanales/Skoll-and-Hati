@@ -49,8 +49,8 @@ function crearEsfera(id) {
 
 function AddPEST(id) {
 	const PEST = document.getElementById('PanelUsuario');
-	const SelLinkA = document.getElementById('NodA');
-	const SelLinkB = document.getElementById('NodB');
+	const SelLinkA = document.getElementById('NodHA');
+	const SelLinkB = document.getElementById('NodHB');
 	if (PEST){
 		PEST.innerHTML += `<div id="PESTNodo${id}" class="PESTNodo"></div>`;
 		SelLinkA.innerHTML += `<option value="Nodo_${id}">Nodo_${id}</option>`;
@@ -62,11 +62,11 @@ function AddLink() {
 	const NodoJA = document.getElementById("NodHA").value;
 	const NodoJB = document.getElementById("NodHB").value;
 	datosGrafo.links.push({ source: NodoJA, target: NodoJB});
-
+	Grafo.graphData({nodes: [...datosGrafo.nodes], links: [...datosGrafo.links]});
 }
 
 function SHOWNodo(nodo) {
-	const idNumero = nodo.id ? nodo.id.replace('nodo_', '') : nodo;
+	const idNumero = nodo.id ? nodo.id.replace('Nodo_', '') : nodo;
 	
 	const PEST = document.getElementById(`PESTNodo${idNumero}`);
 	PEST.style.transform = "translateX(100%)";
