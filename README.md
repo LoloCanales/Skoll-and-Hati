@@ -8,6 +8,7 @@ Sistema multi-agente de IA completamente privado y offline, Visualización en ti
   <summary><b>Fase 1: Estructura HTML inicial (Haz clic para desplegar)</b></summary>
   <br>
   <p>Primeros pasos creando las etiquetas principales y el menú de navegación.</p>
+  <img src="Capturas/Cap2026_09_23.png" alt="Fase " width="100%">
 </details>
 
 <details>
