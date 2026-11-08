@@ -2,7 +2,7 @@
 Sistema multi-agente de IA completamente privado y offline, Visualización en tiempo real mediante una interfaz 3D HTML/JS,
 
 ## Estado Actual
-<b>El proyecto se encuentra en sus primeros pasos de desarrollo en esta sección se muestra la interfaz más actualizada del mismo</b>
+<b>El proyecto se encuentra en sus primeros pasos de desarrollo y en esta sección se muestra la interfaz más actualizada del mismo</b>
 <img src="Capturas/Cap2026_11_04.png" alt="Fase " width="100%">
 
 ## 📅 Diario de Desarrollo
