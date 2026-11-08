@@ -25,10 +25,25 @@ function nodo() {
 	AddPEST(contadorNodos);
 }
 
+const ColourGroup = {
+	"Básico": "#888888",
+	"Intermedio": "#3399ff",
+	"Importante": "#ff3333",
+	"Especial": "#ffcc00"
+};
+const SizeGroup = {
+	"Básico": 1,        // Tamaño por defecto
+	"Intermedio": 3,    // Un poco más grande
+	"Importante": 8,    // Bastante más grande
+	"Especial": 12      // Muy grande
+};
+
 function crearEsfera(id) {
 	const idNodo = `Nodo_${id}`;
 	const nombreNodo = `Agente ${id}`;
-	const grupoNodo = (id % 3) + 1; // Alterna grupos (1, 2, 3)
+	const grupoNodo = "Básico";
+		
+	//grupoNodo = (id % 3) + 1; // Alterna grupos (1, 2, 3)
 
 	// Insertar la nueva esfera al arreglo de datos
 	datosGrafo.nodes.push({id: idNodo, nombre: nombreNodo, grupo: grupoNodo});
@@ -62,6 +77,7 @@ function AddLink() {
 	const NodoJA = document.getElementById("NodHA").value;
 	const NodoJB = document.getElementById("NodHB").value;
 	datosGrafo.links.push({ source: NodoJA, target: NodoJB});
+	// datosGrafo.nodes.push({id: idNodo, nombre: nombreNodo, grupo: grupoNodo});
 	Grafo.graphData({nodes: [...datosGrafo.nodes], links: [...datosGrafo.links]});
 }
 
@@ -84,7 +100,8 @@ document.addEventListener('DOMContentLoaded', () => {
 			.graphData(datosGrafo)
 			.nodeLabel('nombre')
 			.nodeOpacity(0.9)
-			.nodeAutoColorBy('grupo')
+			.nodeColor(nodo => ColourGroup[nodo.grupo] || "#ffffff")
+			.nodeVal(nodo => SizeGroup[nodo.grupo] || 4)
 			.linkDirectionalParticles(1)
 			.linkDirectionalParticleSpeed(0.005)
 			.linkDirectionalParticleWidth(2)
